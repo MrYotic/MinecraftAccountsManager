@@ -6,6 +6,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Management;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,96 +50,13 @@ public partial class AccountPanel : UserControl
         }).Start();
     }
     private Account account;
-    public void OnChatReceive(string text)
-    {
-        if (!text.Contains('<') && text.Contains("Position in queue: "))
-        {
-            int queuePos = int.Parse(text.Split("Position in queue: ")[1].Split(@"\n")[0]);
-            if (account.State == MinecraftState.InGame)
-            {
-                account.State = MinecraftState.InQueue;
-                account.joinToQueue = DateTime.Now;
-            }
-            else if (account.State == MinecraftState.InQueue)
-            {
-                Invoke(() => StatusL.Text = MinecraftStringStates[account.State] + queuePos);
-                account.queuePos = queuePos;
-            }
-        }
-        else if (text.Where(z => z == '<' || z == '>').Count() >= 2)
-        {
-            if(account.State == MinecraftState.InQueue)
-            {
-                account.State = MinecraftState.On2B2T;
-                account.queuePos = -1;
-                account.joinToServer = DateTime.Now;
-                HealthL.Visible = true;
-                account.PipleLineThread = new Thread(() =>
-                {
-                    while(account.State == MinecraftState.On2B2T)
-                    {
-                        Thread.Sleep(500);
-                        account.PipleLine.Seek(0, SeekOrigin.Begin);
-                        byte[] buffer = new byte[account.PipleLine.Length];
-                        account.PipleLine.Read(buffer, 0, buffer.Length);
-                        string data = Encoding.UTF8.GetString(buffer);
-                        string[] args = data.Split(' ');
-                        int index = int.Parse(args[0]);
-                        if(lastPipeLineIndex != index)
-                        {
-                            lastPipeLineIndex = index;
-                            int health = (int)float.Parse(args[1]);
-                            HealthL.Text = health.ToString();
-                            HealthL.ForeColor = Color.FromArgb((byte)(255 - (12.75 * health)), (byte)(12.75 * health), 0);
-                        }
-                    }
-                    Invoke(() => HealthL.Visible = false);
-                });
-                account.PipleLineThread.Start();
-            }
-            else if(account.State == MinecraftState.On2B2T)
-            {
-                Invoke(() => StatusL.Text = MinecraftStringStates[account.State] + Wrapper.TimeSpanToString(DateTime.Now - (DateTime)account.joinToServer));
-            }
-        }
-    }
-    private int lastPipeLineIndex = -1;
-    public MinecraftState UpdateStatus()
-    {
-        MinecraftState state = UpdateState();
-        account.State = state;
-        StatusL.Text = MinecraftStringStates[state];
-        return state;
-    }
-    public MinecraftState UpdateState()
-    {
-        if (account.State == MinecraftState.Launched)
-        {
-            account.Minecraft.MinecraftProcess = MinecraftProcess;
-            ActiveWindowB.Enabled = true;
-            LaunchB.Enabled = true;
-            LaunchB.Text = "Close";
-            return MinecraftState.InGame;
-        }
-        else if(account.State == MinecraftState.InGame || account.State == MinecraftState.InQueue || account.State == MinecraftState.On2B2T)
-        {
-            ActiveWindowB.Enabled = false;
-            LaunchB.Enabled = true;
-            LaunchB.Text = "Launch";
-            account.Minecraft.ChatManager.OnChatReceive -= OnChatReceive;
-            return MinecraftState.NotLaunched;
-        }
-        return account.State;
-    }
-    private bool ExistsMinecraftProcess => Process.GetProcesses().Where(z => z.MainWindowTitle.Contains(account.Name)).Count() != 0;
-    private Process MinecraftProcess => Process.GetProcesses().Where(z => z.MainWindowTitle.Contains(account.Name)).FirstOrDefault();
     private void ActiveWindow_Click(object sender, EventArgs e)
     {
-        bool exists = ExistsMinecraftProcess;
+        bool exists = account.Minecraft.ExistsMinecraftProcess;
         if (exists)
         {
-            IntPtr handle = MinecraftProcess.MainWindowHandle;
-            ShowWindow(handle, 1);
+            IntPtr handle = account.Minecraft.MinecraftProcess.MainWindowHandle;
+            ShowWindow(handle, 0);
             SetForegroundWindow(handle);
         }
     }
@@ -146,24 +65,75 @@ public partial class AccountPanel : UserControl
         LaunchB.Enabled = false;
         if (account.State == MinecraftState.NotLaunched)
         {
-            account.State = MinecraftState.Launched;
-            StatusL.Text = MinecraftStringStates[account.State];
+            UpdateStatus(MinecraftState.Launched);
             account.Minecraft.Start();
             new Thread(() =>
             {
-                int maxAttempt = 1000;
-                int attempt = 0;
-                while (!ExistsMinecraftProcess)
-                {
+                Thread.Sleep(1000);
+                int maxattempt = 1000, attempt = 0;
+                while(!account.Minecraft.ExistsMinecraftProcess)
+                {                    
                     Thread.Sleep(100);
-                    attempt++;
-                    if (attempt > maxAttempt)
-                    {
-                        Invoke(() => UpdateStatus());
+                    if (maxattempt < attempt++)
                         return;
-                    }
                 }
-                Invoke(() => UpdateStatus());
+                Invoke(() =>
+                {
+                    LaunchB.Enabled = true;
+                    LaunchB.Text = "Close";
+                });
+                account.JavaInputThread = new Thread(() =>
+                {
+                    while (account.Minecraft.ExistsMinecraftProcess && account.State != MinecraftState.NotLaunched)
+                    {
+                        try
+                        {
+                            string stringState = File.ReadAllText(Path.Combine(account.Minecraft.Root, "state.txt"));
+                            if (stringState.StartsWith("InGame"))
+                            {
+                                if (account.State != MinecraftState.InGame)
+                                {
+                                    account.joinToServer = account.joinToQueue = null;
+                                    UpdateStatus(MinecraftState.InGame);
+                                    Invoke(() =>
+                                    {
+                                        ActiveWindowB.Enabled = true;
+                                    });
+                                }
+                            }
+                            else if (stringState.StartsWith("InQueue"))
+                            {
+                                if (account.State != MinecraftState.InQueue)
+                                {
+                                    account.joinToQueue = DateTime.Now;
+                                    account.joinToServer = null;
+                                    UpdateStatus(MinecraftState.InQueue);
+                                }
+                                account.queuePos = int.Parse(stringState.Split(' ')[^1]);
+                                Invoke(() => StatusL.Text = "In Queue: " + account.queuePos);
+                            }
+                            else if (stringState.StartsWith("On2B2T"))
+                            {
+                                if (account.State != MinecraftState.On2B2T)
+                                {
+                                    account.joinToServer = DateTime.Now;
+                                    account.joinToQueue = null;
+                                    UpdateStatus(MinecraftState.On2B2T);
+                                }
+                                int health = Math.Min(int.Parse(File.ReadAllText(Path.Combine(account.Minecraft.Root, "pipeline.txt")).Split(' ')[4]) + 1, 20);
+                                Invoke(() =>
+                                {                                    
+                                    HealthL.Text = health.ToString();
+                                    HealthL.ForeColor = Color.FromArgb((byte)(255 - (12.75 * health)), (byte)(12.75 * health), 0);
+                                });
+                            }
+                            if(account.State == MinecraftState.On2B2T)
+                                Invoke(() => HealthL.Visible = true);
+                            else Invoke(() => HealthL.Visible = false);
+                        } catch { }
+                    }
+                });
+                account.JavaInputThread.Start();
             }).Start();
         }
         else
@@ -171,8 +141,13 @@ public partial class AccountPanel : UserControl
             account.Minecraft.Close();
             new Thread(() =>
             {
-                Thread.Sleep(100);
-                Invoke(() => UpdateStatus());
+                UpdateStatus(MinecraftState.NotLaunched);
+                Invoke(() =>
+                {
+                    LaunchB.Enabled = true;
+                    LaunchB.Text = "Launch";
+                    ActiveWindowB.Enabled = false;
+                });
             }).Start();
         }
     }
@@ -191,14 +166,11 @@ public partial class AccountPanel : UserControl
             account.AccessToken = MojangAPI.PrepairAccessToken(form.AccessTokenTB.Text);
             account.UUID = MojangAPI.GetUUID(account.Name);
             account.Minecraft.Close();
-            new Thread(() =>
-            {
-                Thread.Sleep(100);
-                Invoke(() => UpdateStatus());
-            }).Start();
+            
             account.Minecraft = Wrapper.BootManager.NewMinecraft(account);
             Wrapper.SaveAccounts();
             Wrapper.MainWindow.ReloadAccountPanel();
         }
     }
+    public void UpdateStatus(MinecraftState state) => Invoke(() => StatusL.Text = MinecraftStringStates[account.State = state]);
 }

@@ -1,7 +1,5 @@
 ﻿using System.Net;
 using System.Text;
-using Newtonsoft.Json;
-using static MinecraftAccountsManager.AccountPanel;
 using static MinecraftAccountsManager.Minecraft;
 
 namespace MinecraftAccountsManager;
@@ -17,7 +15,6 @@ public class Account
         new Thread(() => SkinHead = MojangAPI.GetSkinHead(uuid)).Start();
         Minecraft = Wrapper.BootManager.NewMinecraft(this);
         Panel = new AccountPanel(this);
-        PipleLine = new FileStream(Path.Combine(Minecraft.Root, "pipeline.txt"), FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
     }
     public string Name { get; set; }
     public string Email { get; set; }
@@ -31,8 +28,7 @@ public class Account
     [NonSerialized] public int queuePos = -1;
     [NonSerialized] public DateTime? joinToServer;
     [NonSerialized] public DateTime? joinToQueue;
-    [NonSerialized] public Stream PipleLine;
-    [NonSerialized] public Thread PipleLineThread;
+    [NonSerialized] public Thread JavaInputThread;
 }
 public static class MojangAPI
 {
@@ -41,7 +37,7 @@ public static class MojangAPI
         try 
         {
             return Image.FromStream(new WebClient().OpenRead(Encoding.UTF8.GetString(Convert.FromBase64String(new WebClient().DownloadString($"https://sessionserver.mojang.com/session/minecraft/profile/{uuid}").Split('\"')[17])).Split('\"')[17]));
-        }catch { }
+        } catch { }
         return new Bitmap(64, 64);
     }
     public static Image GetSkinHead(string uuid) => ((Bitmap)GetSkin(uuid)).Clone(new Rectangle(8, 8, 8, 8), System.Drawing.Imaging.PixelFormat.Format32bppArgb);

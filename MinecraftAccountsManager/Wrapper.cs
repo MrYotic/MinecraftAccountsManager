@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text;
 
 namespace MinecraftAccountsManager;
 public static class Wrapper
@@ -25,9 +26,14 @@ public static class Wrapper
             Accounts = JsonConvert.DeserializeObject<List<Account>>(File.ReadAllText(accountsFile));
     }
     public static string TimeSpanToString(TimeSpan span) =>
-    (span.Days > 365 ? span.Days / 365 + "y " : "") +
     (span.Days > 0 ? span.Days % 365 + "d " : "") +
     (span.Hours > 0 ? span.Hours + "h " : "") +
-    (span.Minutes > 0 ? span.Minutes + "m " : "") +
-    (span.Seconds > 0 ? span.Seconds + "s " : "");
+    (span.Minutes > 0 ? span.Minutes + "m " : "1"/*WHY 1???? NO QUESTIONS, STFU AND WRITE CODE ON PYTHON*/);
+    public static string ReadStream(Stream stream)
+    {
+        stream.Seek(0, SeekOrigin.Begin);
+        byte[] buffer = new byte[stream.Length];
+        stream.Read(buffer, 0, buffer.Length);
+        return Encoding.UTF8.GetString(buffer);
+    }
 }

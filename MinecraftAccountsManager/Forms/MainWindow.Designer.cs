@@ -94,7 +94,7 @@ partial class MainWindow
             // MainWindow
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.Lime;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(600, 436);
             this.Controls.Add(this.CollapseB);
             this.Controls.Add(this.AccountsP);
@@ -105,7 +105,7 @@ partial class MainWindow
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainWindow";
             this.Text = "MainWindow";
-            this.TransparencyKey = System.Drawing.Color.Lime;
+            this.TransparencyKey = System.Drawing.Color.Black;
             this.ResumeLayout(false);
 
     }

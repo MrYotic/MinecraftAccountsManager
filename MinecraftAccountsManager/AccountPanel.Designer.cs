@@ -72,7 +72,7 @@ partial class AccountPanel
             // StatusLabelL
             // 
             this.StatusLabelL.AutoSize = true;
-            this.StatusLabelL.Location = new System.Drawing.Point(252, 2);
+            this.StatusLabelL.Location = new System.Drawing.Point(37, 18);
             this.StatusLabelL.Name = "StatusLabelL";
             this.StatusLabelL.Size = new System.Drawing.Size(47, 16);
             this.StatusLabelL.TabIndex = 3;
@@ -81,7 +81,7 @@ partial class AccountPanel
             // StatusL
             // 
             this.StatusL.AutoSize = true;
-            this.StatusL.Location = new System.Drawing.Point(295, 2);
+            this.StatusL.Location = new System.Drawing.Point(80, 18);
             this.StatusL.Name = "StatusL";
             this.StatusL.Size = new System.Drawing.Size(90, 16);
             this.StatusL.TabIndex = 4;
@@ -121,8 +121,9 @@ partial class AccountPanel
             // HealthL
             // 
             this.HealthL.AutoSize = true;
+            this.HealthL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.HealthL.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.HealthL.Location = new System.Drawing.Point(37, 17);
+            this.HealthL.Location = new System.Drawing.Point(173, 16);
             this.HealthL.Name = "HealthL";
             this.HealthL.Size = new System.Drawing.Size(28, 18);
             this.HealthL.TabIndex = 7;
