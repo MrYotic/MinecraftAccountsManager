@@ -1,4 +1,5 @@
 ﻿using MinecraftAccountsManager.Forms;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static MinecraftAccountsManager.Minecraft;
 
@@ -57,7 +58,12 @@ public partial class AccountPanel : UserControl
             LaunchB.Enabled = true;
             LaunchB.Text = "Close";
             ActiveWindowB.Enabled = true;
-            Update();
+            account.JavaInputThread = new Thread(() =>
+            {
+                while (account.Minecraft.ExistsMinecraftProcess && account.State != MinecraftState.NotLaunched)
+                    try { Update(); } catch { }
+            });
+            account.JavaInputThread.Start();
         }
     }
     private Account account;
@@ -180,6 +186,7 @@ public partial class AccountPanel : UserControl
                 ToolTips.SetDHToolTip(SkinHeadAvatarPB, "");
             });
         }
+        Thread.Sleep(1000);
     }
     private void ChangeAccountB_Click(object sender, EventArgs e)
     {
