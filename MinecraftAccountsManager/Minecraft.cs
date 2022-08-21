@@ -51,17 +51,22 @@ public class Minecraft
     public Process MinecraftProcess => Process.GetProcesses().Where(z => z.ProcessName == "java").Where(z => GetProcessUsername(z).Equals(Account.Name)).FirstOrDefault();
     public static string GetProcessUsername(Process process)
     {
-        try
+        if (!Wrapper.Processes.ContainsKey(process.Id))
         {
-            using (ManagementObjectCollection moc = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id).Get())
+            string username = "undefined";
+            try
             {
-                string text = (from mo in moc.Cast<ManagementObject>() select mo["CommandLine"]).First().ToString();
-                if (text.Contains("username"))
-                    return text.Split("username")[1].Split('-')[0].Split(' ')[1];
+                using (ManagementObjectCollection moc = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id).Get())
+                {
+                    string? text = (from mo in moc.Cast<ManagementObject>() select mo["CommandLine"]).FirstOrDefault().ToString();
+                    if (text != null && text.Contains("username"))
+                        username = text.Split("username")[1].Split('-')[0].Split(' ')[1];
+                }
             }
+            catch { }
+            Wrapper.Processes.Add(process.Id, username);
         }
-        catch { }
-        return "Undefind";
+        return Wrapper.Processes[process.Id];
     }
     public static Dictionary<int, string> Dimensions = new Dictionary<int, string>()
     {

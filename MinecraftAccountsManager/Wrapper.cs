@@ -36,4 +36,5 @@ public static class Wrapper
         stream.Read(buffer, 0, buffer.Length);
         return Encoding.UTF8.GetString(buffer);
     }
+    public static Dictionary<int, string> Processes = new Dictionary<int, string>();
 }
