@@ -63,6 +63,12 @@ public class Minecraft
         catch { }
         return "Undefind";
     }
+    public static Dictionary<int, string> Dimensions = new Dictionary<int, string>()
+    {
+        { -1, "Nether" },
+        { 0, "Overworld" },
+        { 1, "End" }
+    };
     public static Dictionary<MinecraftState, string> MinecraftStringStates = new Dictionary<MinecraftState, string>()
     {
         { MinecraftState.NotLaunched, "Not Launched" },

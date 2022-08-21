@@ -26,9 +26,9 @@ public static class Wrapper
             Accounts = JsonConvert.DeserializeObject<List<Account>>(File.ReadAllText(accountsFile));
     }
     public static string TimeSpanToString(TimeSpan span) =>
-    (span.Days > 0 ? span.Days % 365 + "d " : "") +
+    ((span.Days > 0 ? span.Days % 365 + "d " : "") +
     (span.Hours > 0 ? span.Hours + "h " : "") +
-    (span.Minutes > 0 ? span.Minutes + "m " : "1"/*WHY 1???? NO QUESTIONS, STFU AND WRITE CODE ON PYTHON*/);
+    (span.Minutes > 0 ? span.Minutes + "m" : "1m"/*WHY 1???? NO QUESTIONS, STFU AND WRITE CODE ON PYTHON*/)).Trim();
     public static string ReadStream(Stream stream)
     {
         stream.Seek(0, SeekOrigin.Begin);

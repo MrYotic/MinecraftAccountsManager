@@ -1,17 +1,5 @@
 ﻿using MinecraftAccountsManager.Forms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Management;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using static MinecraftAccountsManager.Minecraft;
 
 namespace MinecraftAccountsManager;
@@ -26,9 +14,23 @@ public partial class AccountPanel : UserControl
     {
         InitializeComponent();
         NameL.Text = account.Name;
-        UUIDL.Text = account.UUID;
         this.account = account;
+        int startWidth = NameL.Location.X + NameL.Size.Width + 24;
+        ChangeAccountB.Location = new Point(startWidth, 4);
+        startWidth += ChangeAccountB.Width + 2;
+        LaunchB.Location = new Point(startWidth, 4);
+        startWidth += LaunchB.Width + 2;
+        ActiveWindowB.Location = new Point(startWidth, 4);
+        startWidth += ActiveWindowB.Width + 4;
+        Size = new Size(startWidth, 36);
+        ToolTips = new DHToolTips(Font);
     }
+    private DHToolTips ToolTips;
+    private string AccountToolTipCaption => account.Name + '\n' +
+        $"Dimension: {Dimensions[account.Player.Dimension]}\n" +
+        $"Coord: {account.Player.X} {account.Player.Y} {account.Player.Z}\n" +
+        (account.Player.Dimension == 0 ? $"Nether Coord: {account.Player.X / 8} {account.Player.Y} {account.Player.Z / 8}\n" : "") +
+        $"Health: {account.Player.Health}    Food: {account.Player.Food}";
     private void AccountPanel_Load(object sender, EventArgs e)
     {
         new Thread(() =>
@@ -48,15 +50,25 @@ public partial class AccountPanel : UserControl
                 }
             Invoke(() => SkinHeadAvatarPB.Image = head);
         }).Start();
+        if (account.Minecraft.ExistsMinecraftProcess)
+        {
+            account.State = MinecraftState.InGame;
+            StatusL.Text = MinecraftStringStates[account.State];
+            LaunchB.Enabled = true;
+            LaunchB.Text = "Close";
+            ActiveWindowB.Enabled = true;
+            Update();
+        }
     }
     private Account account;
+    private Player lastPlayer;
     private void ActiveWindow_Click(object sender, EventArgs e)
     {
         bool exists = account.Minecraft.ExistsMinecraftProcess;
         if (exists)
         {
             IntPtr handle = account.Minecraft.MinecraftProcess.MainWindowHandle;
-            ShowWindow(handle, 0);
+            ShowWindow(handle, 4); //1 - min front //3 - max front //4 - normal front
             SetForegroundWindow(handle);
         }
     }
@@ -85,53 +97,7 @@ public partial class AccountPanel : UserControl
                 account.JavaInputThread = new Thread(() =>
                 {
                     while (account.Minecraft.ExistsMinecraftProcess && account.State != MinecraftState.NotLaunched)
-                    {
-                        try
-                        {
-                            string stringState = File.ReadAllText(Path.Combine(account.Minecraft.Root, "state.txt"));
-                            if (stringState.StartsWith("InGame"))
-                            {
-                                if (account.State != MinecraftState.InGame)
-                                {
-                                    account.joinToServer = account.joinToQueue = null;
-                                    UpdateStatus(MinecraftState.InGame);
-                                    Invoke(() =>
-                                    {
-                                        ActiveWindowB.Enabled = true;
-                                    });
-                                }
-                            }
-                            else if (stringState.StartsWith("InQueue"))
-                            {
-                                if (account.State != MinecraftState.InQueue)
-                                {
-                                    account.joinToQueue = DateTime.Now;
-                                    account.joinToServer = null;
-                                    UpdateStatus(MinecraftState.InQueue);
-                                }
-                                account.queuePos = int.Parse(stringState.Split(' ')[^1]);
-                                Invoke(() => StatusL.Text = "In Queue: " + account.queuePos);
-                            }
-                            else if (stringState.StartsWith("On2B2T"))
-                            {
-                                if (account.State != MinecraftState.On2B2T)
-                                {
-                                    account.joinToServer = DateTime.Now;
-                                    account.joinToQueue = null;
-                                    UpdateStatus(MinecraftState.On2B2T);
-                                }
-                                int health = Math.Min(int.Parse(File.ReadAllText(Path.Combine(account.Minecraft.Root, "pipeline.txt")).Split(' ')[4]) + 1, 20);
-                                Invoke(() =>
-                                {                                    
-                                    HealthL.Text = health.ToString();
-                                    HealthL.ForeColor = Color.FromArgb((byte)(255 - (12.75 * health)), (byte)(12.75 * health), 0);
-                                });
-                            }
-                            if(account.State == MinecraftState.On2B2T)
-                                Invoke(() => HealthL.Visible = true);
-                            else Invoke(() => HealthL.Visible = false);
-                        } catch { }
-                    }
+                        try { Update(); } catch { }
                 });
                 account.JavaInputThread.Start();
             }).Start();
@@ -147,8 +113,72 @@ public partial class AccountPanel : UserControl
                     LaunchB.Enabled = true;
                     LaunchB.Text = "Launch";
                     ActiveWindowB.Enabled = false;
+                    HealthL.Visible = false;
                 });
             }).Start();
+        }
+    }
+    private void Update()
+    {
+        string stringState = File.ReadAllText(Path.Combine(account.Minecraft.Root, "state.txt"));
+        if (stringState.StartsWith("InGame"))
+        {
+            if (account.State != MinecraftState.InGame)
+            {
+                account.joinToServer = account.joinToQueue = null;
+                UpdateStatus(MinecraftState.InGame);
+                Invoke(() =>
+                {
+                    ActiveWindowB.Enabled = true;
+                });
+            }
+        }
+        else if (stringState.StartsWith("InQueue"))
+        {
+            if (account.State != MinecraftState.InQueue)
+            {
+                account.joinToQueue = DateTime.Now;
+                account.joinToServer = null;
+                UpdateStatus(MinecraftState.InQueue);
+            }
+            account.queuePos = int.Parse(stringState.Split(' ')[^1]);
+            Invoke(() => StatusL.Text = $"q: {account.queuePos} ({Wrapper.TimeSpanToString(DateTime.Now - (DateTime)account.joinToQueue)})");
+        }
+        else if (stringState.StartsWith("On2B2T"))
+        {
+            if (account.State != MinecraftState.On2B2T)
+            {
+                account.joinToServer = DateTime.Now;
+                account.joinToQueue = null;
+                UpdateStatus(MinecraftState.On2B2T);
+            }
+            int[] pipelineArgs = File.ReadAllText(Path.Combine(account.Minecraft.Root, "pipeline.txt")).Split(' ').Take(6).Select(int.Parse).ToArray();
+            account.Player = new Player(pipelineArgs[0], pipelineArgs[1], pipelineArgs[2], pipelineArgs[3], Math.Min(pipelineArgs[4] + 1, 20), pipelineArgs[5]);
+            Invoke(() =>
+            {
+                HealthL.Text = $"[{account.Player.Health}]";
+                HealthL.ForeColor = Color.FromArgb((byte)(255 - (12.75 * account.Player.Health)), (byte)(12.75 * account.Player.Health), 0);
+                HealthL.Location = new Point(NameL.Location.X + NameL.Size.Width, 2);
+                StatusL.Text = $"On 2B2T ({Wrapper.TimeSpanToString(DateTime.Now - (DateTime)account.joinToServer)})";
+                if(!account.Player.Equals(lastPlayer))
+                {
+                    string caption = AccountToolTipCaption;
+                    ToolTips.SetDHToolTip(NameL, caption);
+                    ToolTips.SetDHToolTip(SkinHeadAvatarPB, caption);
+                    lastPlayer = account.Player;
+                }
+            });
+        }
+        if (account.State == MinecraftState.On2B2T)
+            Invoke(() => HealthL.Visible = true);
+        else
+        {
+            Invoke(() =>
+            {
+                HealthL.Visible = false;
+                ToolTips.SetDHToolTip(NameL, "");
+                ToolTips.SetDHToolTip(SkinHeadAvatarPB, "");
+            });
         }
     }
     private void ChangeAccountB_Click(object sender, EventArgs e)

@@ -29,6 +29,7 @@ public class Account
     [NonSerialized] public DateTime? joinToServer;
     [NonSerialized] public DateTime? joinToQueue;
     [NonSerialized] public Thread JavaInputThread;
+    [NonSerialized] public Player Player;
 }
 public static class MojangAPI
 {

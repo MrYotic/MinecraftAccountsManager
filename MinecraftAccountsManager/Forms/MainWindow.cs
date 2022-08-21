@@ -14,11 +14,6 @@ public partial class MainWindow : Form
             WndProc(ref m);
         }
     }
-    private static IEnumerable<Control> GetControls(Control control, params Type[] types)
-    {
-        var controls = control.Controls.Cast<Control>();
-        return controls.Cast<Control>().SelectMany(x => GetControls(x, types)).Concat(controls).Where(c => types.Contains(c.GetType()));
-    }
     #endregion
     public MainWindow()
     {
@@ -28,22 +23,27 @@ public partial class MainWindow : Form
         ReloadAccountPanel();
     }
     private bool collapsed;
-    private AddAccountForm form = new AddAccountForm();
-    private void CloseB_Click(object sender, EventArgs e) => Environment.Exit(0);
+    private AddAccountForm addAccountForm = new AddAccountForm();
+    private ExitConfirm exitConfirmForm = new ExitConfirm();
+    private void CloseB_Click(object sender, EventArgs e)
+    {
+        if(exitConfirmForm.ShowDialog() == DialogResult.OK)
+            Environment.Exit(0);
+    }
     private void AddAccountB_Click(object sender, EventArgs e)
     {
-        if(form.ShowDialog() == DialogResult.OK)
+        if(addAccountForm.ShowDialog() == DialogResult.OK)
         {
-            Account account = new Account(form.NameTB.Text, form.EmailTB.Text, form.PasswordTB.Text, MojangAPI.GetUUID(form.NameTB.Text), MojangAPI.PrepairAccessToken(form.AccessTokenTB.Text));
+            Account account = new Account(addAccountForm.NameTB.Text, addAccountForm.EmailTB.Text, addAccountForm.PasswordTB.Text, MojangAPI.GetUUID(addAccountForm.NameTB.Text), MojangAPI.PrepairAccessToken(addAccountForm.AccessTokenTB.Text));
             Wrapper.Accounts.Add(account);
             Wrapper.SaveAccounts();
             ReloadAccountPanel();
-            form = new AddAccountForm();
+            addAccountForm = new AddAccountForm();
         }
     }
     public void ReloadAccountPanel()
     {
-        GetControls(this, typeof(Panel), typeof(Label), typeof(PictureBox), typeof(AccountPanel)).Concat(new Control[] { this }).ToList().ForEach(z => z.MouseDown -= MouseDownRelocate);
+        ControlHelper.GetControls(this, typeof(Panel), typeof(Label), typeof(PictureBox), typeof(AccountPanel)).Concat(new Control[] { this }).ToList().ForEach(z => z.MouseDown -= MouseDownRelocate);
         AccountsP.Controls.Clear();
         int index = 0;
         Wrapper.Accounts.ForEach(z =>
@@ -52,10 +52,11 @@ public partial class MainWindow : Form
             z.Panel.Location = new Point(0, index * 36);
             index++;
         });
-        GetControls(this, typeof(Panel), typeof(Label), typeof(PictureBox), typeof(AccountPanel)).Concat(new Control[] { this }).ToList().ForEach(z => z.MouseDown += MouseDownRelocate);
+        ControlHelper.GetControls(this, typeof(Panel), typeof(Label), typeof(PictureBox), typeof(AccountPanel)).Concat(new Control[] { this }).ToList().ForEach(z => z.MouseDown += MouseDownRelocate);
         int height = index * 36;
-        AccountsP.Size = new Size(600, height);
-        Size = new Size(600, height + 20);
+        int width = Math.Max(100, Wrapper.Accounts.Select(z => z.Panel.Size.Width).Max());
+        AccountsP.Size = new Size(width, height);
+        Size = new Size(width, height + 20);
     }
     private void CollapseB_Click(object sender, EventArgs e)
     {
