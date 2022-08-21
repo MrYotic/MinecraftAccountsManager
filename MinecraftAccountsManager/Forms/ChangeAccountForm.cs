@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace MinecraftAccountsManager.Forms;
-public partial class ChangeAccountForm : Form
+﻿namespace MinecraftAccountsManager.Forms;
+public sealed partial class ChangeAccountForm : Form
 {
     #region Hood
     public void MouseDownRelocate(object sender, MouseEventArgs e)
@@ -26,5 +16,22 @@ public partial class ChangeAccountForm : Form
     {
         InitializeComponent();
         ControlHelper.GetControls(this, typeof(Panel), typeof(Label), typeof(PictureBox), typeof(AccountPanel)).Concat(new Control[] { this }).ToList().ForEach(z => z.MouseDown += MouseDownRelocate);
+    }
+    public ChangeAccountForm(Account account) : this()
+    {
+        NameTB.Text = account.Name;
+        EmailTB.Text = account.Email;
+        PasswordTB.Text = account.Password;
+        AccessTokenTB.Text = account.AccessToken;
+    }
+    public void ToAccount(ref Account account)
+    {
+        account.Name = NameTB.Text;
+        account.Email = EmailTB.Text;
+        account.Password = PasswordTB.Text;
+        account.AccessToken = MojangAPI.PrepairAccessToken(AccessTokenTB.Text);
+        account.UUID = MojangAPI.GetUUID(account.Name);
+        account.Minecraft.Close();
+        account.Minecraft = Wrapper.BootManager.NewMinecraft(account);
     }
 }

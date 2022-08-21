@@ -3,7 +3,7 @@ using System.Text;
 using static MinecraftAccountsManager.Minecraft;
 
 namespace MinecraftAccountsManager;
-public class Account
+public sealed class Account
 {
     public Account(string name, string email, string password, string uuid, string accessToken)
     {

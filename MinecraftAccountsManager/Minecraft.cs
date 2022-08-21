@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Management;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MinecraftAccountsManager;
-public class Minecraft
+public sealed class Minecraft
 {
     public Minecraft(string root, Account account, string bat)
     {
         Root = root;
         Account = account;
         BootBatText = bat;
+        BootBatPath = Path.Combine(Root, "boot.bat");
         PrepairMinecraft();
     }
     public string Root;
@@ -25,9 +21,6 @@ public class Minecraft
     {
         if (!Directory.Exists(Root))
             Directory.CreateDirectory(Root);
-        BootBatPath = Path.Combine(Root, "boot.bat");
-        if (File.Exists(BootBatPath))
-            File.Delete(BootBatPath);
         File.Create(BootBatPath).Dispose();
         File.WriteAllText(BootBatPath, BootBatText);
     }
@@ -45,7 +38,6 @@ public class Minecraft
     {
         BootBatProcess?.Kill();
         MinecraftProcess?.Kill();
-        BootBatProcess = null;
     }
     public bool ExistsMinecraftProcess => Process.GetProcesses().Where(z => z.ProcessName == "java").Where(z => GetProcessUsername(z).Equals(Account.Name)).Count() != 0;
     public Process MinecraftProcess => Process.GetProcesses().Where(z => z.ProcessName == "java").Where(z => GetProcessUsername(z).Equals(Account.Name)).FirstOrDefault();

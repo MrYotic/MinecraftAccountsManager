@@ -1,5 +1,5 @@
 ﻿namespace MinecraftAccountsManager;
-public class MinecraftBootManager
+public sealed class MinecraftBootManager
 {
     public MinecraftBootManager(string java,  int memoryMin, int memoryMax, int width, int height)
     {

@@ -1,12 +1,9 @@
 ﻿using System.Data;
-using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
 
 namespace MinecraftAccountsManager;
 //this class from other project (DH - DooDHack).
-public partial class DHToolTips : ToolTip
+public sealed partial class DHToolTips : ToolTip
 {
     private Dictionary<Control, (string caption, Size size)> AssociatedControls = new Dictionary<Control, (string caption, Size size)>();
     private Font font;

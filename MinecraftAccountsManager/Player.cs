@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MinecraftAccountsManager;
-public class Player
+﻿namespace MinecraftAccountsManager;
+public sealed class Player
 {
     public Player(int dimension, int x, int y, int z, int health, int food)
     {

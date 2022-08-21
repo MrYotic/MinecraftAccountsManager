@@ -2,7 +2,7 @@
 
 namespace MinecraftAccountsManager;
 
-public partial class MainWindow : Form
+public sealed partial class MainWindow : Form
 {
     #region Hood
     public void MouseDownRelocate(object sender, MouseEventArgs e)

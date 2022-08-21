@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace MinecraftAccountsManager.Forms;
-public partial class ExitConfirm : Form
+﻿namespace MinecraftAccountsManager.Forms;
+public sealed partial class ExitConfirm : Form
 {
     #region Hood
     public void MouseDownRelocate(object sender, MouseEventArgs e)
