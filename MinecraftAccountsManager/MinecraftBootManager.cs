@@ -1,5 +1,4 @@
-﻿namespace MinecraftAccountsManager;
-public sealed class MinecraftBootManager
+﻿public sealed class MinecraftBootManager
 {
     public MinecraftBootManager(string java,  int memoryMin, int memoryMax, int width, int height)
     {
@@ -10,13 +9,11 @@ public sealed class MinecraftBootManager
         WindowHeight = height;
     }
     public string Java;
-    public int MemoryMin;
-    public int MemoryMax;
-    public int WindowWidth;
-    public int WindowHeight;
+    public int MemoryMin, MemoryMax;
+    public int WindowWidth, WindowHeight;
     public Minecraft NewMinecraft(Account account)
     {
-        string dotMinecraft = $"C:/Users/{Environment.UserName}/AppData/Roaming/.minecraft";        
+        string dotMinecraft = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace('\\', '/')}/.minecraft";        
         return new Minecraft(Path.Combine(Wrapper.Root, account.Name),
             account,
             $"SET APPDATA=%{dotMinecraft}%\n" +

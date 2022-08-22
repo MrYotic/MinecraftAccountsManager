@@ -1,5 +1,4 @@
-﻿namespace MinecraftAccountsManager;
-
+﻿
 partial class MainWindow
 {
     /// <summary>

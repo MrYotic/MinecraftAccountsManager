@@ -1,6 +1,5 @@
 ﻿using System.Drawing.Drawing2D;
 
-namespace MinecraftAccountsManager;
 public static class ControlHelper
 {
     public static Point FindMiddle(Control ownControl, Control memControl, bool x, bool y) => new Point(x ? ownControl.Width / 2 - memControl.Width / 2 : memControl.Location.X, y ? ownControl.Height / 2 - memControl.Height / 2 : memControl.Location.Y);

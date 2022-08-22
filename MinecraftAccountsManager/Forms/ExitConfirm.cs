@@ -1,5 +1,4 @@
-﻿namespace MinecraftAccountsManager.Forms;
-public sealed partial class ExitConfirm : Form
+﻿public sealed partial class ExitConfirm : Form
 {
     #region Hood
     public void MouseDownRelocate(object sender, MouseEventArgs e)

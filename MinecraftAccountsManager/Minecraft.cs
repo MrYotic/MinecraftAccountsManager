@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Management;
+using System.Text;
 
-namespace MinecraftAccountsManager;
 public sealed class Minecraft
 {
     public Minecraft(string root, Account account, string bat)
@@ -19,10 +19,8 @@ public sealed class Minecraft
     private Process BootBatProcess;
     public void PrepairMinecraft()
     {
-        if (!Directory.Exists(Root))
-            Directory.CreateDirectory(Root);
-        File.Create(BootBatPath).Dispose();
-        File.WriteAllText(BootBatPath, BootBatText);
+        Directory.CreateDirectory(Root);
+        File.Create(BootBatPath).Write(Encoding.UTF8.GetBytes(BootBatText).AsSpan());
     }
     public void Start()
     {
@@ -39,8 +37,14 @@ public sealed class Minecraft
         BootBatProcess?.Kill();
         MinecraftProcess?.Kill();
     }
-    public bool ExistsMinecraftProcess => Process.GetProcesses().Where(z => z.ProcessName == "java").Where(z => GetProcessUsername(z).Equals(Account.Name)).Count() != 0;
-    public Process MinecraftProcess => Process.GetProcesses().Where(z => z.ProcessName == "java").Where(z => GetProcessUsername(z).Equals(Account.Name)).FirstOrDefault();
+    public bool ExistsMinecraftProcess => MinecraftProcess != null;
+    public Process MinecraftProcess{ get {
+            var processes = Process.GetProcesses().Where(z => z.ProcessName == "java").Where(z => GetProcessUsername(z).Equals(Account.Name)).ToArray();
+            if (processes.Count() == 0)
+                return null;
+            return processes[0];
+        }
+    }
     public static string GetProcessUsername(Process process)
     {
         if (!Wrapper.Processes.ContainsKey(process.Id))
@@ -48,15 +52,13 @@ public sealed class Minecraft
             string username = "undefined";
             try
             {
-                using (ManagementObjectCollection moc = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id).Get())
-                {
-                    string? text = (from mo in moc.Cast<ManagementObject>() select mo["CommandLine"]).FirstOrDefault().ToString();
-                    if (text != null && text.Contains("username"))
-                        username = text.Split("username")[1].Split('-')[0].Split(' ')[1];
-                }
+                using var moc = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id).Get();
+                string? text = (from mo in moc.Cast<ManagementObject>() select mo["CommandLine"]).FirstOrDefault().ToString();
+                if (text != null && text.Contains("username"))
+                    username = text.Split("username")[1].Split('-')[0].Split(' ')[1];
             }
             catch { }
-            Wrapper.Processes.Add(process.Id, username);
+            Wrapper.Processes[process.Id] = username;
         }
         return Wrapper.Processes[process.Id];
     }

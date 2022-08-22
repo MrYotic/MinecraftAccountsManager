@@ -1,5 +1,4 @@
-﻿namespace MinecraftAccountsManager.Forms;
-public sealed partial class AddAccountForm : Form
+﻿public sealed partial class AddAccountForm : Form
 {
     #region Hood
     public void MouseDownRelocate(object sender, MouseEventArgs e)

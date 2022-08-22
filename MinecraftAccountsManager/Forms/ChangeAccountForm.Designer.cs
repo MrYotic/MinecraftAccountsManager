@@ -1,6 +1,4 @@
-﻿namespace MinecraftAccountsManager.Forms;
-
-partial class ChangeAccountForm
+﻿partial class ChangeAccountForm
 {
     /// <summary>
     /// Required designer variable.

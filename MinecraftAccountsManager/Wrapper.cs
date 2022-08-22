@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-
-namespace MinecraftAccountsManager;
 public static class Wrapper
 {
     public static MainWindow MainWindow { get; set; }
@@ -25,7 +23,7 @@ public static class Wrapper
         if(File.Exists(accountsFile))
             Accounts = JsonConvert.DeserializeObject<List<Account>>(File.ReadAllText(accountsFile));
     }
-    public static string TimeSpanToString(TimeSpan span) =>
+    public static string ToDescriptiveString(this TimeSpan span) =>
     ((span.Days > 0 ? span.Days % 365 + "d " : "") +
     (span.Hours > 0 ? span.Hours + "h " : "") +
     (span.Minutes > 0 ? span.Minutes + "m" : "1m"/*WHY 1???? NO QUESTIONS, STFU AND WRITE CODE ON PYTHON*/)).Trim();

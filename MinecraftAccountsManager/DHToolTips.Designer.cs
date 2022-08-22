@@ -1,6 +1,4 @@
-﻿namespace MinecraftAccountsManager;
-
-partial class DHToolTips
+﻿partial class DHToolTips
 {
     /// <summary> 
     /// Required designer variable.

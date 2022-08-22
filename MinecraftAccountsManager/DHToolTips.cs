@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Drawing.Drawing2D;
 
-namespace MinecraftAccountsManager;
 //this class from other project (DH - DooDHack).
 public sealed partial class DHToolTips : ToolTip
 {

@@ -1,6 +1,4 @@
-﻿namespace MinecraftAccountsManager.Forms;
-
-partial class ExitConfirm
+﻿partial class ExitConfirm
 {
     /// <summary>
     /// Required designer variable.

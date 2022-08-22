@@ -1,8 +1,4 @@
-﻿using MinecraftAccountsManager.Forms;
-
-namespace MinecraftAccountsManager;
-
-public sealed partial class MainWindow : Form
+﻿public sealed partial class MainWindow : Form
 {
     #region Hood
     public void MouseDownRelocate(object sender, MouseEventArgs e)
@@ -60,9 +56,7 @@ public sealed partial class MainWindow : Form
     }
     private void CollapseB_Click(object sender, EventArgs e)
     {
-        if (collapsed) CollapseB.Text = "卍";
-        else CollapseB.Text = "卐";
-        collapsed = TopMost = !collapsed;
+        CollapseB.Text = (collapsed = TopMost = !collapsed) ? "卐" : "卍";
         CollapseB.BackColor = CollapseB.FlatAppearance.MouseOverBackColor = CollapseB.FlatAppearance.MouseDownBackColor = (collapsed ? Color.FromArgb(47, 67, 47) : Color.FromArgb(67, 47, 47));
     }
 }

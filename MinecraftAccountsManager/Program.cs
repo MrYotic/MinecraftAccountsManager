@@ -1,5 +1,3 @@
-namespace MinecraftAccountsManager;
-
 public static class Program
 {
     [STAThread]

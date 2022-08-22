@@ -1,8 +1,6 @@
-﻿using MinecraftAccountsManager.Forms;
-using System.Runtime.InteropServices;
-using static MinecraftAccountsManager.Minecraft;
+﻿using System.Runtime.InteropServices;
+using static Minecraft;
 
-namespace MinecraftAccountsManager;
 public sealed partial class AccountPanel : UserControl
 {
     #region DllImports
@@ -37,7 +35,7 @@ public sealed partial class AccountPanel : UserControl
         new Thread(() =>
         {
             while (account.SkinHead == null)
-                Thread.Sleep(25);
+                Thread. Sleep(25);
             Bitmap head = new Bitmap(32, 32);
             #region Scale Image
             // Fuck Graphics.
@@ -83,20 +81,7 @@ public sealed partial class AccountPanel : UserControl
     {
         LaunchB.Enabled = false;
         if (account.State == MinecraftState.NotLaunched)
-        {
-            new Thread(() =>
-            {
-                Thread.Sleep(1000);
-                int maxattempt = 1000, attempt = 0;
-                while (!account.Minecraft.ExistsMinecraftProcess)
-                {
-                    Thread.Sleep(100);
-                    if (maxattempt < attempt++)
-                        return;
-                }
-                StartMinecraft();
-            }).Start();
-        }
+            StartMinecraft();
         else CloseMinecraft();
     }
     #endregion
@@ -116,17 +101,29 @@ public sealed partial class AccountPanel : UserControl
     {
         UpdateStatus(MinecraftState.Launched);
         account.Minecraft.Start();
-        Invoke(() =>
+        new Thread(() =>
         {
-            LaunchB.Enabled = true;
-            LaunchB.Text = "Close";
-        });
-        account.JavaInputThread = new Thread(() =>
-        {
-            while (account.Minecraft.ExistsMinecraftProcess && account.State != MinecraftState.NotLaunched)
-                Update();
-        });
-        account.JavaInputThread.Start();
+            Thread.Sleep(1000);
+            int maxattempt = 1000, attempt = 0;
+            while (!account.Minecraft.ExistsMinecraftProcess)
+            {
+                Thread.Sleep(100);
+                if (maxattempt < attempt++)
+                    return;
+            }
+            UpdateStatus(MinecraftState.InGame);
+            Invoke(() =>
+            {
+                LaunchB.Enabled = true;
+                LaunchB.Text = "Close";
+            });
+            account.JavaInputThread = new Thread(() =>
+            {
+                while (account.Minecraft.ExistsMinecraftProcess && account.State != MinecraftState.NotLaunched)
+                    Update();
+            });
+            account.JavaInputThread.Start();
+        }).Start();
     }
     private void CloseMinecraft()
     {
@@ -168,7 +165,7 @@ public sealed partial class AccountPanel : UserControl
                     UpdateStatus(MinecraftState.InQueue);
                 }
                 account.queuePos = int.Parse(stringState.Split(' ')[^1]);
-                Invoke(() => StatusL.Text = $"q: {account.queuePos} ({Wrapper.TimeSpanToString(DateTime.Now - (DateTime)account.joinToQueue)})");
+                Invoke(() => StatusL.Text = $"q: {account.queuePos} ({(DateTime.Now - (DateTime)account.joinToQueue).ToDescriptiveString()})");
             }
             else if (stringState.StartsWith("On2B2T"))
             {
@@ -185,7 +182,7 @@ public sealed partial class AccountPanel : UserControl
                     HealthL.Text = $"[{account.Player.Health}]";
                     HealthL.ForeColor = Color.FromArgb((byte)(255 - (12.75 * account.Player.Health)), (byte)(12.75 * account.Player.Health), 0);
                     HealthL.Location = new Point(NameL.Location.X + NameL.Size.Width, 2);
-                    StatusL.Text = $"On 2B2T ({Wrapper.TimeSpanToString(DateTime.Now - (DateTime)account.joinToServer)})";
+                    StatusL.Text = $"On 2B2T ({(DateTime.Now - (DateTime)account.joinToServer).ToDescriptiveString()})";
                     if (!account.Player.Equals(lastPlayer))
                     {
                         string caption = AccountToolTipCaption;

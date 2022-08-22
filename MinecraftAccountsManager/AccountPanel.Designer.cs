@@ -1,6 +1,4 @@
-﻿namespace MinecraftAccountsManager;
-
-partial class AccountPanel
+﻿partial class AccountPanel
 {
     /// <summary> 
     /// Required designer variable.
