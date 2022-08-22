@@ -9,7 +9,7 @@ public sealed partial class AccountPanel : UserControl
     [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
     public static void FocusWindow(IntPtr hWnd)
     {
-        ShowWindow(hWnd, 4);
+        ShowWindow(hWnd, 5);
         SetForegroundWindow(hWnd);
     }
     #endregion
