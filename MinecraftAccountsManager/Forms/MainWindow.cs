@@ -50,7 +50,7 @@
         });
         ControlHelper.GetControls(this, typeof(Panel), typeof(Label), typeof(PictureBox), typeof(AccountPanel)).Concat(new Control[] { this }).ToList().ForEach(z => z.MouseDown += MouseDownRelocate);
         int height = index * 36;
-        int width = Math.Max(100, Wrapper.Accounts.Select(z => z.Panel.Size.Width).Max());
+        int width = Math.Max(100, Wrapper.Accounts.Count > 0 ? Wrapper.Accounts.Select(z => z.Panel.Size.Width).Max() : 300);
         AccountsP.Size = new Size(width, height);
         Size = new Size(width, height + 20);
     }
