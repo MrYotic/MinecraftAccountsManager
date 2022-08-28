@@ -50,11 +50,12 @@
             this.KeepB.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.KeepB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.KeepB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.KeepB.Location = new System.Drawing.Point(9, 53);
+            this.KeepB.Location = new System.Drawing.Point(6, 54);
             this.KeepB.Margin = new System.Windows.Forms.Padding(0);
             this.KeepB.Name = "KeepB";
             this.KeepB.Size = new System.Drawing.Size(116, 22);
             this.KeepB.TabIndex = 9;
+            this.KeepB.TabStop = false;
             this.KeepB.Text = "Да, не, не надо";
             this.KeepB.UseVisualStyleBackColor = false;
             // 
@@ -67,11 +68,12 @@
             this.ExitB.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.ExitB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ExitB.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ExitB.Location = new System.Drawing.Point(125, 53);
+            this.ExitB.Location = new System.Drawing.Point(128, 54);
             this.ExitB.Margin = new System.Windows.Forms.Padding(0);
             this.ExitB.Name = "ExitB";
             this.ExitB.Size = new System.Drawing.Size(108, 22);
             this.ExitB.TabIndex = 10;
+            this.ExitB.TabStop = false;
             this.ExitB.Text = "Естественно";
             this.ExitB.UseVisualStyleBackColor = false;
             // 

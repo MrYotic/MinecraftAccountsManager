@@ -75,6 +75,7 @@
             this.ActiveWindowB.Name = "ActiveWindowB";
             this.ActiveWindowB.Size = new System.Drawing.Size(54, 30);
             this.ActiveWindowB.TabIndex = 5;
+            this.ActiveWindowB.TabStop = false;
             this.ActiveWindowB.Text = "Active";
             this.ActiveWindowB.UseVisualStyleBackColor = false;
             this.ActiveWindowB.Click += new System.EventHandler(this.ActiveWindow_Click);
@@ -90,6 +91,7 @@
             this.LaunchB.Name = "LaunchB";
             this.LaunchB.Size = new System.Drawing.Size(64, 30);
             this.LaunchB.TabIndex = 6;
+            this.LaunchB.TabStop = false;
             this.LaunchB.Text = "Launch";
             this.LaunchB.UseVisualStyleBackColor = false;
             this.LaunchB.Click += new System.EventHandler(this.LaunchB_Click);
@@ -117,6 +119,7 @@
             this.ChangeAccountB.Name = "ChangeAccountB";
             this.ChangeAccountB.Size = new System.Drawing.Size(30, 30);
             this.ChangeAccountB.TabIndex = 8;
+            this.ChangeAccountB.TabStop = false;
             this.ChangeAccountB.Text = "c";
             this.ChangeAccountB.UseVisualStyleBackColor = false;
             this.ChangeAccountB.Click += new System.EventHandler(this.ChangeAccountB_Click);

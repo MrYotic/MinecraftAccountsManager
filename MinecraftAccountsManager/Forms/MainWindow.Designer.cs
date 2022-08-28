@@ -46,6 +46,7 @@ partial class MainWindow
             this.CloseB.Name = "CloseB";
             this.CloseB.Size = new System.Drawing.Size(22, 22);
             this.CloseB.TabIndex = 0;
+            this.CloseB.TabStop = false;
             this.CloseB.Text = "X";
             this.CloseB.UseVisualStyleBackColor = false;
             this.CloseB.Click += new System.EventHandler(this.CloseB_Click);
@@ -61,6 +62,7 @@ partial class MainWindow
             this.AddAccountB.Name = "AddAccountB";
             this.AddAccountB.Size = new System.Drawing.Size(22, 22);
             this.AddAccountB.TabIndex = 1;
+            this.AddAccountB.TabStop = false;
             this.AddAccountB.Text = "+";
             this.AddAccountB.UseVisualStyleBackColor = false;
             this.AddAccountB.Click += new System.EventHandler(this.AddAccountB_Click);
@@ -86,6 +88,7 @@ partial class MainWindow
             this.CollapseB.Name = "CollapseB";
             this.CollapseB.Size = new System.Drawing.Size(22, 22);
             this.CollapseB.TabIndex = 3;
+            this.CollapseB.TabStop = false;
             this.CollapseB.Text = "卍";
             this.CollapseB.UseVisualStyleBackColor = false;
             this.CollapseB.Click += new System.EventHandler(this.CollapseB_Click);

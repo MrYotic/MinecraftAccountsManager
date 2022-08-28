@@ -54,6 +54,7 @@
             this.CloseB.Name = "CloseB";
             this.CloseB.Size = new System.Drawing.Size(22, 22);
             this.CloseB.TabIndex = 7;
+            this.CloseB.TabStop = false;
             this.CloseB.Text = "X";
             this.CloseB.UseVisualStyleBackColor = true;
             // 
@@ -95,6 +96,7 @@
             this.PasswordTB.Name = "PasswordTB";
             this.PasswordTB.Size = new System.Drawing.Size(225, 15);
             this.PasswordTB.TabIndex = 14;
+            this.PasswordTB.TabStop = false;
             // 
             // AccessTokenTB
             // 
@@ -106,6 +108,7 @@
             this.AccessTokenTB.Name = "AccessTokenTB";
             this.AccessTokenTB.Size = new System.Drawing.Size(199, 15);
             this.AccessTokenTB.TabIndex = 13;
+            this.AccessTokenTB.TabStop = false;
             // 
             // AccessTokenL
             // 
@@ -137,6 +140,7 @@
             this.EmailTB.Name = "EmailTB";
             this.EmailTB.Size = new System.Drawing.Size(249, 15);
             this.EmailTB.TabIndex = 10;
+            this.EmailTB.TabStop = false;
             // 
             // EmailL
             // 
@@ -160,6 +164,7 @@
             this.ContinueB.Name = "ContinueB";
             this.ContinueB.Size = new System.Drawing.Size(94, 22);
             this.ContinueB.TabIndex = 8;
+            this.ContinueB.TabStop = false;
             this.ContinueB.Text = "Continue";
             this.ContinueB.UseVisualStyleBackColor = false;
             // 
@@ -173,6 +178,7 @@
             this.NameTB.Name = "NameTB";
             this.NameTB.Size = new System.Drawing.Size(245, 15);
             this.NameTB.TabIndex = 7;
+            this.NameTB.TabStop = false;
             // 
             // NameL
             // 

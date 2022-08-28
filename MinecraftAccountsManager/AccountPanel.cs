@@ -116,6 +116,7 @@ public sealed partial class AccountPanel : UserControl
             {
                 LaunchB.Enabled = true;
                 LaunchB.Text = "Close";
+                ActiveWindowB.Enabled = true;
             });
             account.JavaInputThread = new Thread(() =>
             {

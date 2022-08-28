@@ -29,15 +29,15 @@
             this.CloseB = new System.Windows.Forms.Button();
             this.FormTitle = new System.Windows.Forms.Label();
             this.DisplayP = new System.Windows.Forms.Panel();
+            this.PasswordTB = new System.Windows.Forms.TextBox();
+            this.AccessTokenTB = new System.Windows.Forms.TextBox();
+            this.AccessTokenL = new System.Windows.Forms.Label();
+            this.PasswordL = new System.Windows.Forms.Label();
+            this.EmailTB = new System.Windows.Forms.TextBox();
+            this.EmailL = new System.Windows.Forms.Label();
             this.ContinueB = new System.Windows.Forms.Button();
             this.NameTB = new System.Windows.Forms.TextBox();
             this.NameL = new System.Windows.Forms.Label();
-            this.EmailTB = new System.Windows.Forms.TextBox();
-            this.EmailL = new System.Windows.Forms.Label();
-            this.PasswordL = new System.Windows.Forms.Label();
-            this.AccessTokenL = new System.Windows.Forms.Label();
-            this.AccessTokenTB = new System.Windows.Forms.TextBox();
-            this.PasswordTB = new System.Windows.Forms.TextBox();
             this.DisplayP.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +54,7 @@
             this.CloseB.Name = "CloseB";
             this.CloseB.Size = new System.Drawing.Size(22, 22);
             this.CloseB.TabIndex = 7;
+            this.CloseB.TabStop = false;
             this.CloseB.Text = "X";
             this.CloseB.UseVisualStyleBackColor = true;
             // 
@@ -85,6 +86,72 @@
             this.DisplayP.Size = new System.Drawing.Size(300, 109);
             this.DisplayP.TabIndex = 9;
             // 
+            // PasswordTB
+            // 
+            this.PasswordTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.PasswordTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.PasswordTB.ForeColor = System.Drawing.Color.Silver;
+            this.PasswordTB.Location = new System.Drawing.Point(70, 47);
+            this.PasswordTB.MaxLength = 1024;
+            this.PasswordTB.Name = "PasswordTB";
+            this.PasswordTB.Size = new System.Drawing.Size(225, 15);
+            this.PasswordTB.TabIndex = 14;
+            this.PasswordTB.TabStop = false;
+            // 
+            // AccessTokenTB
+            // 
+            this.AccessTokenTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.AccessTokenTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.AccessTokenTB.ForeColor = System.Drawing.Color.Silver;
+            this.AccessTokenTB.Location = new System.Drawing.Point(96, 67);
+            this.AccessTokenTB.MaxLength = 1024;
+            this.AccessTokenTB.Name = "AccessTokenTB";
+            this.AccessTokenTB.Size = new System.Drawing.Size(199, 15);
+            this.AccessTokenTB.TabIndex = 13;
+            this.AccessTokenTB.TabStop = false;
+            // 
+            // AccessTokenL
+            // 
+            this.AccessTokenL.AutoSize = true;
+            this.AccessTokenL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AccessTokenL.Location = new System.Drawing.Point(4, 66);
+            this.AccessTokenL.Name = "AccessTokenL";
+            this.AccessTokenL.Size = new System.Drawing.Size(94, 16);
+            this.AccessTokenL.TabIndex = 12;
+            this.AccessTokenL.Text = "AccessToken:";
+            // 
+            // PasswordL
+            // 
+            this.PasswordL.AutoSize = true;
+            this.PasswordL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PasswordL.Location = new System.Drawing.Point(4, 46);
+            this.PasswordL.Name = "PasswordL";
+            this.PasswordL.Size = new System.Drawing.Size(70, 16);
+            this.PasswordL.TabIndex = 11;
+            this.PasswordL.Text = "Password:";
+            // 
+            // EmailTB
+            // 
+            this.EmailTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.EmailTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.EmailTB.ForeColor = System.Drawing.Color.Silver;
+            this.EmailTB.Location = new System.Drawing.Point(46, 27);
+            this.EmailTB.MaxLength = 80;
+            this.EmailTB.Name = "EmailTB";
+            this.EmailTB.Size = new System.Drawing.Size(249, 15);
+            this.EmailTB.TabIndex = 10;
+            this.EmailTB.TabStop = false;
+            // 
+            // EmailL
+            // 
+            this.EmailL.AutoSize = true;
+            this.EmailL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EmailL.Location = new System.Drawing.Point(4, 26);
+            this.EmailL.Name = "EmailL";
+            this.EmailL.Size = new System.Drawing.Size(44, 16);
+            this.EmailL.TabIndex = 9;
+            this.EmailL.Text = "Email:";
+            // 
             // ContinueB
             // 
             this.ContinueB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
@@ -97,6 +164,7 @@
             this.ContinueB.Name = "ContinueB";
             this.ContinueB.Size = new System.Drawing.Size(94, 22);
             this.ContinueB.TabIndex = 8;
+            this.ContinueB.TabStop = false;
             this.ContinueB.Text = "Continue";
             this.ContinueB.UseVisualStyleBackColor = false;
             // 
@@ -110,6 +178,7 @@
             this.NameTB.Name = "NameTB";
             this.NameTB.Size = new System.Drawing.Size(245, 15);
             this.NameTB.TabIndex = 7;
+            this.NameTB.TabStop = false;
             // 
             // NameL
             // 
@@ -120,69 +189,6 @@
             this.NameL.Size = new System.Drawing.Size(47, 16);
             this.NameL.TabIndex = 0;
             this.NameL.Text = "Name:";
-            // 
-            // EmailTB
-            // 
-            this.EmailTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.EmailTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.EmailTB.ForeColor = System.Drawing.Color.Silver;
-            this.EmailTB.Location = new System.Drawing.Point(46, 27);
-            this.EmailTB.MaxLength = 80;
-            this.EmailTB.Name = "EmailTB";
-            this.EmailTB.Size = new System.Drawing.Size(249, 15);
-            this.EmailTB.TabIndex = 10;
-            // 
-            // EmailL
-            // 
-            this.EmailL.AutoSize = true;
-            this.EmailL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.EmailL.Location = new System.Drawing.Point(4, 26);
-            this.EmailL.Name = "EmailL";
-            this.EmailL.Size = new System.Drawing.Size(44, 16);
-            this.EmailL.TabIndex = 9;
-            this.EmailL.Text = "Email:";
-            // 
-            // PasswordL
-            // 
-            this.PasswordL.AutoSize = true;
-            this.PasswordL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.PasswordL.Location = new System.Drawing.Point(4, 46);
-            this.PasswordL.Name = "PasswordL";
-            this.PasswordL.Size = new System.Drawing.Size(70, 16);
-            this.PasswordL.TabIndex = 11;
-            this.PasswordL.Text = "Password:";
-            // 
-            // AccessTokenL
-            // 
-            this.AccessTokenL.AutoSize = true;
-            this.AccessTokenL.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AccessTokenL.Location = new System.Drawing.Point(4, 66);
-            this.AccessTokenL.Name = "AccessTokenL";
-            this.AccessTokenL.Size = new System.Drawing.Size(94, 16);
-            this.AccessTokenL.TabIndex = 12;
-            this.AccessTokenL.Text = "AccessToken:";
-            // 
-            // AccessTokenTB
-            // 
-            this.AccessTokenTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.AccessTokenTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.AccessTokenTB.ForeColor = System.Drawing.Color.Silver;
-            this.AccessTokenTB.Location = new System.Drawing.Point(96, 67);
-            this.AccessTokenTB.MaxLength = 1024;
-            this.AccessTokenTB.Name = "AccessTokenTB";
-            this.AccessTokenTB.Size = new System.Drawing.Size(199, 15);
-            this.AccessTokenTB.TabIndex = 13;
-            // 
-            // PasswordTB
-            // 
-            this.PasswordTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.PasswordTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.PasswordTB.ForeColor = System.Drawing.Color.Silver;
-            this.PasswordTB.Location = new System.Drawing.Point(70, 47);
-            this.PasswordTB.MaxLength = 1024;
-            this.PasswordTB.Name = "PasswordTB";
-            this.PasswordTB.Size = new System.Drawing.Size(225, 15);
-            this.PasswordTB.TabIndex = 14;
             // 
             // AddAccountForm
             // 
