@@ -73,6 +73,7 @@ public sealed partial class AccountPanel : UserControl
         if (form.ShowDialog() != DialogResult.OK)
             return;
         form.ToAccount(ref account);
+        account.Name = form.Name;
         Wrapper.SaveAccounts();
         Wrapper.MainWindow.ReloadAccountPanel();
     }
